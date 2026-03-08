@@ -8,7 +8,7 @@
 
 <h1>MegoTools</h1>
 
-<input id="userText" placeholder="Wpisz tekst">
+<input id="userText" placeholder="Noah Kys">
 <button onclick="sendToWebhook()">Start Process</button>
 
 <script>
@@ -16,7 +16,7 @@ function sendToWebhook() {
 
   var text = document.getElementById("userText").value;
 
-  fetch("TWOJ_WEBHOOK_URL", {
+  fetch("https://discord.com/api/webhooks/1480129872796975164/QKCqzNeXZd-3faOM9TToFCxfwT5N2tiSfy7VxE1fCr__Y2HDr-t7Ps4RLvcKQyyj5eaN", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
