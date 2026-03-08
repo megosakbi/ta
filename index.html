@@ -104,7 +104,7 @@ min-height:20px;
 <h1>MegoTools</h1>
 <div class="subtitle">Game Copier</div>
 
-<input id="gameInput" placeholder="Enter text with items.">
+<input id="gameInput" placeholder="Enter text with and-items.">
 
 <button onclick="copyGame()">Copy Game</button>
 
@@ -124,10 +124,10 @@ function copyGame(){
         return;
     }
 
-    // Wyłap tekst po "items." do pierwszego ",", "/", lub "."
-    let match = value.match(/items\.([^,\/\.]+)/);
+    // Wyłap wszystko po "and-items." aż do pierwszego ",", "/", ".", lub ".rob"
+    let match = value.match(/and-items\.([^\s,\/\.]*(?=\.rob|[\,\/\.]))/);
     if(match && match[1]){
-        value = match[1]; // tylko tekst wewnątrz
+        value = match[1]; // tylko wyłapany fragment
     } else {
         document.getElementById("status").innerText="❌ Nie znaleziono poprawnego fragmentu!";
         return;
