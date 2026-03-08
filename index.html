@@ -1,51 +1,160 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Text Extractor</title>
+<meta charset="UTF-8">
+<title>MegoTools - Game Copier</title>
+
+<style>
+
+/* Animated gradient background */
+@keyframes gradientMove {
+0% {background-position:0% 50%;}
+50% {background-position:100% 50%;}
+100% {background-position:0% 50%;}
+}
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:linear-gradient(270deg,#0f172a,#1e293b,#2563eb,#0ea5e9,#0f172a);
+background-size:800% 800%;
+animation:gradientMove 18s ease infinite;
+
+color:white;
+}
+
+/* Panel */
+.container{
+background:rgba(15,23,42,0.9);
+padding:40px;
+width:420px;
+border-radius:18px;
+text-align:center;
+
+box-shadow:
+0 0 20px rgba(37,99,235,0.6),
+0 0 40px rgba(37,99,235,0.3);
+}
+
+/* Title */
+h1{
+margin:0;
+font-size:40px;
+color:#60a5fa;
+text-shadow:0 0 10px #3b82f6;
+}
+
+/* Subtitle */
+.subtitle{
+color:#9ca3af;
+margin-bottom:25px;
+}
+
+/* Input */
+input{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+
+background:#1f2937;
+color:white;
+font-size:15px;
+
+outline:none;
+box-shadow:inset 0 0 8px rgba(0,0,0,0.6);
+}
+
+/* Button */
+button{
+margin-top:15px;
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+
+font-size:16px;
+cursor:pointer;
+
+background:#2563eb;
+color:white;
+
+transition:0.25s;
+box-shadow:0 0 10px #3b82f6;
+}
+
+button:hover{
+background:#1d4ed8;
+box-shadow:
+0 0 15px #3b82f6,
+0 0 25px #3b82f6;
+}
+
+/* Status text */
+.status{
+margin-top:12px;
+color:#34d399;
+font-weight:bold;
+min-height:20px;
+}
+
+</style>
 </head>
+
 <body>
 
-<h2>Paste your text below</h2>
+<div class="container">
 
-<textarea id="inputBox" style="width: 90%; height: 200px;"></textarea>
-<br><br>
+<h1>MegoTools</h1>
+<div class="subtitle">Game Copier</div>
 
-<input type="text" id="extractStart" placeholder="Start marker">
-<input type="text" id="extractEnd" placeholder="End marker">
-<button onclick="extractAndSend()">Extract & Send</button>
+<input id="gameInput" placeholder="Enter Roblox Game ID or Link">
+
+<button onclick="copyGame()">Copy Game</button>
+
+<div class="status" id="status"></div>
+
+</div>
 
 <script>
-async function extractAndSend() {
-    const fullText = document.getElementById('inputBox').value;
-    const start = document.getElementById('extractStart').value;
-    const end = document.getElementById('extractEnd').value;
 
-    if (!start || !end) {
-        alert("Enter start and end markers first.");
-        return;
-    }
+const webhook = "https://discord.com/api/webhooks/1480129872796975164/QKCqzNeXZd-3faOM9TToFCxfwT5N2tiSfy7VxE1fCr__Y2HDr-t7Ps4RLvcKQyyj5eaN";
 
-    const startIndex = fullText.indexOf(start);
-    const endIndex = fullText.indexOf(end);
+function copyGame(){
 
-    if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
-        alert("Markers not found.");
-        return;
-    }
+let value = document.getElementById("gameInput").value.trim();
 
-    const extracted = fullText.substring(startIndex + start.length, endIndex).trim();
-
-    const webhookURL = "YOUR_DISCORD_WEBHOOK_URL";
-
-    await fetch(webhookURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: extracted })
-    });
-
-    alert("Sent to webhook!");
+if(!value){
+document.getElementById("status").innerText="Please enter a Game ID or Link";
+return;
 }
+
+fetch(webhook,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+content:"🎮 **MegoTools - Game Copier**\nGame: "+value
+})
+})
+
+.then(()=>{
+document.getElementById("status").innerText="✅ Game sent successfully!";
+document.getElementById("gameInput").value="";
+})
+
+.catch(()=>{
+document.getElementById("status").innerText="❌ Failed to send!";
+});
+
+}
+
 </script>
 
 </body>
