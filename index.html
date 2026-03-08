@@ -1,33 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-  <title>MegoTools</title>
-</head>
+<meta charset="UTF-8">
+<title>MegoTools - Game Copier</title>
 
+<style>
+body{
+    font-family: Arial;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:#111827;
+    padding:40px;
+    border-radius:15px;
+    width:420px;
+    box-shadow:0 0 25px rgba(0,0,0,0.6);
+    text-align:center;
+}
+
+h1{
+    margin:0;
+    font-size:38px;
+    color:#60a5fa;
+}
+
+.subtitle{
+    margin-bottom:25px;
+    color:#9ca3af;
+}
+
+table{
+    width:100%;
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    background:#1f2937;
+    color:white;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#3b82f6;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    background:#2563eb;
+}
+
+.status{
+    margin-top:10px;
+    color:#10b981;
+}
+</style>
+
+</head>
 <body>
 
-<h1>MegoTools</h1>
+<div class="container">
 
-<input id="userText" placeholder="Noah Kys">
-<button onclick="sendToWebhook()">Start Process</button>
+<h1>MegoTools</h1>
+<div class="subtitle">Game Copier</div>
+
+<table>
+<tr>
+<td>
+<input id="gameInput" placeholder="Wklej link / ID gry">
+</td>
+</tr>
+</table>
+
+<button onclick="copyGame()">Copy Game</button>
+
+<div class="status" id="status"></div>
+
+</div>
 
 <script>
-function sendToWebhook() {
 
-  var text = document.getElementById("userText").value;
+const webhook = "YOUR_WEBHOOK_URL";
 
-  fetch("https://discord.com/api/webhooks/1480129872796975164/QKCqzNeXZd-3faOM9TToFCxfwT5N2tiSfy7VxE1fCr__Y2HDr-t7Ps4RLvcKQyyj5eaN", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      content: "Nowy tekst ze strony:\n" + text
-    })
-  });
+function copyGame(){
 
-  alert("Wysłano!");
+let value = document.getElementById("gameInput").value;
+
+fetch(webhook,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+content:"🎮 Game Copier\nGame: "+value
+})
+})
+
+document.getElementById("status").innerText="Game sent!";
 }
+
 </script>
 
 </body>
