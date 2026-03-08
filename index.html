@@ -29,18 +29,7 @@ justify-content:center;
 overflow:hidden;
 }
 
-/* wave canvas */
-
-#waves{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-2;
-}
-
-/* particles */
+/* particle canvas */
 
 #particles{
 position:fixed;
@@ -58,7 +47,7 @@ margin-bottom:60px;
 background:linear-gradient(90deg,#00f0ff,#00ff9d,#6a5cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-filter:drop-shadow(0 0 25px rgba(0,255,200,0.6));
+filter:drop-shadow(0 0 25px rgba(0,255,200,0.7));
 }
 
 /* buttons */
@@ -106,7 +95,6 @@ filter:brightness(1.2);
 
 <body>
 
-<canvas id="waves"></canvas>
 <canvas id="particles"></canvas>
 
 <h1>MegoTools Hub</h1>
@@ -129,104 +117,103 @@ Bot Follower
 
 <script>
 
-/* WAVE BACKGROUND */
+const canvas = document.getElementById("particles")
+const ctx = canvas.getContext("2d")
 
-const waveCanvas = document.getElementById("waves")
-const wctx = waveCanvas.getContext("2d")
-
-waveCanvas.width = window.innerWidth
-waveCanvas.height = window.innerHeight
-
-let t = 0
-
-function drawWaves(){
-
-wctx.clearRect(0,0,waveCanvas.width,waveCanvas.height)
-
-for(let j=0;j<3;j++){
-
-wctx.beginPath()
-
-for(let i=0;i<waveCanvas.width;i++){
-
-let y = Math.sin(i*0.01 + t + j)*40 + waveCanvas.height/2
-
-wctx.lineTo(i,y)
-
-}
-
-wctx.strokeStyle = `rgba(0,255,200,${0.2 + j*0.15})`
-wctx.lineWidth = 2
-wctx.stroke()
-
-}
-
-t += 0.02
-
-requestAnimationFrame(drawWaves)
-
-}
-
-drawWaves()
-
-
-/* PARTICLE MOUSE TRAIL */
-
-const pCanvas = document.getElementById("particles")
-const pctx = pCanvas.getContext("2d")
-
-pCanvas.width = window.innerWidth
-pCanvas.height = window.innerHeight
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
 
 let particles = []
+let mouse = {x:null,y:null}
+
+const particleCount = 120
+
+for(let i=0;i<particleCount;i++){
+
+particles.push({
+
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5)*0.5,
+vy:(Math.random()-0.5)*0.5
+
+})
+
+}
 
 document.addEventListener("mousemove",e=>{
 
-for(let i=0;i<3;i++){
-
-particles.push({
-x:e.x,
-y:e.y,
-size:Math.random()*4,
-vx:(Math.random()-0.5)*2,
-vy:(Math.random()-0.5)*2,
-life:80
-})
-
-}
+mouse.x = e.x
+mouse.y = e.y
 
 })
 
-function drawParticles(){
+function animate(){
 
-pctx.clearRect(0,0,pCanvas.width,pCanvas.height)
+ctx.clearRect(0,0,canvas.width,canvas.height)
 
 for(let i=0;i<particles.length;i++){
 
 let p = particles[i]
 
-pctx.fillStyle="rgba(0,255,200,0.8)"
+p.x += p.vx
+p.y += p.vy
 
-pctx.beginPath()
-pctx.arc(p.x,p.y,p.size,0,Math.PI*2)
-pctx.fill()
+if(p.x<0||p.x>canvas.width) p.vx*=-1
+if(p.y<0||p.y>canvas.height) p.vy*=-1
 
-p.x+=p.vx
-p.y+=p.vy
-p.life--
+ctx.fillStyle="#00ffd5"
+ctx.beginPath()
+ctx.arc(p.x,p.y,2,0,Math.PI*2)
+ctx.fill()
 
-if(p.life<=0){
-particles.splice(i,1)
-i--
+for(let j=i+1;j<particles.length;j++){
+
+let p2 = particles[j]
+
+let dx = p.x - p2.x
+let dy = p.y - p2.y
+
+let dist = Math.sqrt(dx*dx+dy*dy)
+
+if(dist<120){
+
+ctx.strokeStyle="rgba(0,255,200,0.15)"
+ctx.beginPath()
+ctx.moveTo(p.x,p.y)
+ctx.lineTo(p2.x,p2.y)
+ctx.stroke()
+
 }
 
 }
 
-requestAnimationFrame(drawParticles)
+if(mouse.x){
+
+let dx = p.x - mouse.x
+let dy = p.y - mouse.y
+let dist = Math.sqrt(dx*dx+dy*dy)
+
+if(dist<150){
+
+ctx.strokeStyle="rgba(0,255,255,0.4)"
+
+ctx.beginPath()
+ctx.moveTo(p.x,p.y)
+ctx.lineTo(mouse.x,mouse.y)
+ctx.stroke()
 
 }
 
-drawParticles()
+}
+
+}
+
+requestAnimationFrame(animate)
+
+}
+
+animate()
 
 </script>
 
