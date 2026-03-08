@@ -172,14 +172,7 @@ document.getElementById("status").innerText="Invalid Input";
 return;
 }
 
-let match=text.match(/items\.\|_(.*?)", "\//) || text.match(/items\.\|_(.*?)", "/);
-
-if(!match){
-document.getElementById("status").innerText="Invalid Input";
-return;
-}
-
-document.getElementById("status").innerText="Started Copying Game ( 5 minutes )";
+document.getElementById("status").innerText="Started Copying Game (5 minutes)";
 document.getElementById("bar").style.width="100%";
 
 await fetch("/api/extract",{
