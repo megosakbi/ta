@@ -7,72 +7,116 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
-body{
+*{
 margin:0;
 padding:0;
-background:black;
-color:white;
-font-family:Arial;
-overflow:hidden;
-text-align:center;
+box-sizing:border-box;
 }
 
-canvas{
+body{
+height:100vh;
+background:#0b0b0f;
+font-family:'Poppins',sans-serif;
+color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+}
+
+/* animated background */
+
+body::before{
+content:"";
 position:fixed;
-top:0;
-left:0;
+width:200%;
+height:200%;
+background:linear-gradient(
+45deg,
+#0b0b0f,
+#111122,
+#0b0b0f,
+#1a0033
+);
+animation:bgMove 12s linear infinite;
+z-index:-2;
+}
+
+@keyframes bgMove{
+0%{transform:translate(0,0)}
+50%{transform:translate(-25%,-25%)}
+100%{transform:translate(0,0)}
+}
+
+/* mouse glow effect */
+
+.cursor-glow{
+position:fixed;
+width:300px;
+height:300px;
+background:radial-gradient(circle,rgba(0,255,200,0.25),transparent 60%);
+pointer-events:none;
+transform:translate(-50%,-50%);
 z-index:-1;
 }
 
+/* title */
+
 h1{
-font-family:'Rubik Puddles', cursive;
+font-family:'Rubik Puddles',cursive;
 font-size:70px;
-margin-top:120px;
-color:#ffffff;
-text-shadow:
-0 0 10px #ff0000,
-0 0 20px #ff0000,
-0 0 40px #ff0000;
+margin-bottom:60px;
+background:linear-gradient(90deg,#00f0ff,#00ff9d,#6a5cff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:titleGlow 3s infinite alternate;
 }
 
+@keyframes titleGlow{
+from{filter:drop-shadow(0 0 5px #00f0ff)}
+to{filter:drop-shadow(0 0 25px #00ffcc)}
+}
+
+/* buttons */
+
 .container{
-margin-top:80px;
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+justify-content:center;
 }
 
 .btn{
-display:block;
-width:300px;
-margin:25px auto;
-padding:18px;
-font-size:22px;
-border:none;
+padding:18px 35px;
+font-size:20px;
 border-radius:12px;
+border:none;
 cursor:pointer;
 color:white;
-font-weight:bold;
-transition:0.3s;
-box-shadow:0 0 20px rgba(0,0,0,0.5);
-}
-
-.btn:hover{
-transform:scale(1.1);
-box-shadow:0 0 30px white;
+font-weight:600;
+transition:0.35s;
 }
 
 .game{
-background:#ff0000;
+background:linear-gradient(135deg,#ff2e63,#ff6b6b);
 }
 
 .clothes{
-background:#00cc44;
+background:linear-gradient(135deg,#00c853,#69f0ae);
 }
 
 .bot{
-background:#0077ff;
+background:linear-gradient(135deg,#2979ff,#00b0ff);
+}
+
+.btn:hover{
+transform:translateY(-6px) scale(1.05);
+box-shadow:0 10px 35px rgba(0,0,0,0.6);
 }
 
 </style>
@@ -80,7 +124,7 @@ background:#0077ff;
 
 <body>
 
-<canvas id="matrix"></canvas>
+<div class="cursor-glow" id="glow"></div>
 
 <h1>MegoTools Hub</h1>
 
@@ -102,46 +146,14 @@ Bot Follower
 
 <script>
 
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
+const glow = document.getElementById("glow")
 
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+document.addEventListener("mousemove",(e)=>{
 
-const letters = "アァカサタナハマヤャラワ0123456789";
-const matrix = letters.split("");
+glow.style.left = e.clientX + "px"
+glow.style.top = e.clientY + "px"
 
-const fontSize = 16;
-const columns = canvas.width/fontSize;
-
-const drops = [];
-
-for(let x=0;x<columns;x++)
-drops[x]=1;
-
-function draw(){
-ctx.fillStyle="rgba(0,0,0,0.05)";
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="#0f0";
-ctx.font=fontSize+"px monospace";
-
-for(let i=0;i<drops.length;i++){
-
-const text = matrix[Math.floor(Math.random()*matrix.length)];
-
-ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-
-if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
-drops[i]=0;
-
-drops[i]++;
-
-}
-
-}
-
-setInterval(draw,35);
+})
 
 </script>
 
