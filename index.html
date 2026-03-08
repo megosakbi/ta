@@ -3,70 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <title>MegoTools Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
-/* Body i tło */
 body{
   margin:0;
-  min-height:100vh;
-  font-family:'Major Mono Display', monospace;
-  color:white;
+  height:100vh;
+  font-family:'Orbitron', sans-serif;
+  background:black;
   display:flex;
   justify-content:center;
   align-items:center;
   flex-direction:column;
   text-align:center;
-  background:black;
   overflow:hidden;
 }
 
-/* Matrix tło */
-canvas#matrix {
-  position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+/* MATRIX BACKGROUND */
+canvas#matrix{
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
   z-index:-1;
 }
 
-/* Tytuł */
+/* TITLE */
 h1{
-  font-size:60px;
-  margin-bottom:50px;
+  font-size:64px;
   color:#00ff99;
-  text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 20px #00ff99;
-  animation: neonPulse 1.5s ease-in-out infinite alternate;
+  text-shadow:0 0 10px #00ff99,0 0 20px #00ff99,0 0 40px #00ff99,0 0 60px #00ff99;
+  margin-bottom:50px;
+  animation: glow 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes neonPulse{
-  0% { text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 20px #00ff99; color:#00ff99; }
-  50% { text-shadow: 0 0 15px #00ff99, 0 0 30px #00ff99, 0 0 50px #00ff99; color:#00ffaa; }
-  100% { text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 20px #00ff99; color:#00ff99; }
+@keyframes glow{
+  0% { text-shadow:0 0 10px #00ff99,0 0 20px #00ff99,0 0 40px #00ff99,0 0 60px #00ff99; color:#00ff99;}
+  50% { text-shadow:0 0 20px #00ff99,0 0 40px #00ff99,0 0 60px #00ff99,0 0 80px #00ff99; color:#00ffaa;}
+  100%{ text-shadow:0 0 10px #00ff99,0 0 20px #00ff99,0 0 40px #00ff99,0 0 60px #00ff99; color:#00ff99;}
 }
 
-/* Przyciski */
+/* BUTTONS */
 button{
   margin:15px auto;
   padding:18px 40px;
   font-size:20px;
-  font-family:'Major Mono Display', monospace;
   border:none;
-  border-radius:15px;
-  cursor:pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
-  color:white;
+  border-radius:12px;
   text-transform:uppercase;
   letter-spacing:1px;
+  font-family:'Orbitron', sans-serif;
+  cursor:pointer;
+  position:relative;
+  z-index:1;
+  color:white;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
 }
+
+/* Neon colors */
+#gameBtn{
+  background:linear-gradient(45deg,#ff3c3c,#ff0000);
+  box-shadow:0 0 10px #ff3c3c,0 0 20px #ff0000,0 0 30px #ff3c3c;
+}
+#clothesBtn{
+  background:linear-gradient(45deg,#00ff88,#00c000);
+  box-shadow:0 0 10px #00ff88,0 0 20px #00c000,0 0 30px #00ff88;
+}
+#botBtn{
+  background:linear-gradient(45deg,#00c0ff,#0040ff);
+  box-shadow:0 0 10px #00c0ff,0 0 20px #0040ff,0 0 30px #00c0ff;
+}
+
 button:hover{
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.6);
+  transform: scale(1.08);
+  box-shadow:0 0 20px #fff,0 0 40px #fff,0 0 60px #fff;
 }
-#gameBtn{background: linear-gradient(45deg,#ff4c4c,#ff0000);}
-#clothesBtn{background: linear-gradient(45deg,#00ff88,#00c000);}
-#botBtn{background: linear-gradient(45deg,#00c0ff,#0040ff);}
+
 </style>
 </head>
 <body>
@@ -93,7 +104,7 @@ const columns = canvas.width / fontSize;
 const drops = [];
 
 for(let x = 0; x < columns; x++){
-  drops[x] = Math.random() * canvas.height;
+  drops[x] = Math.random()*canvas.height;
 }
 
 function draw(){
@@ -103,9 +114,9 @@ function draw(){
   ctx.fillStyle = "#00ff00";
   ctx.font = fontSize + "px monospace";
 
-  for(let i = 0; i < drops.length; i++){
-    const text = letters.charAt(Math.floor(Math.random() * letters.length));
-    ctx.fillText(text, i*fontSize, drops[i]);
+  for(let i=0;i<drops.length;i++){
+    const text = letters.charAt(Math.floor(Math.random()*letters.length));
+    ctx.fillText(text,i*fontSize,drops[i]);
     drops[i] += fontSize;
     if(drops[i] > canvas.height && Math.random() > 0.975){
       drops[i] = 0;
@@ -113,9 +124,9 @@ function draw(){
   }
 }
 
-setInterval(draw, 50);
+setInterval(draw,50);
 
-window.addEventListener('resize', () => {
+window.addEventListener('resize',()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
