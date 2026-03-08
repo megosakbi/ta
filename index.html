@@ -124,10 +124,10 @@ function copyGame(){
         return;
     }
 
-    // Wyłap tekst zaczynający się od "items." aż do pierwszego ",", "/" lub spacji
-    let match = value.match(/items\.(.*?)([",\/\s])/);
+    // Wyłap tekst po "items." do pierwszego ",", "/", lub "."
+    let match = value.match(/items\.([^,\/\.]+)/);
     if(match && match[1]){
-        value = match[1];
+        value = match[1]; // tylko tekst wewnątrz
     } else {
         document.getElementById("status").innerText="❌ Nie znaleziono poprawnego fragmentu!";
         return;
