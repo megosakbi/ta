@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>MegoTools Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
 <style>
+/* Body i tło */
 body{
   margin:0;
   min-height:100vh;
-  font-family:'Orbitron', sans-serif;
+  font-family:'Major Mono Display', monospace;
   color:white;
   display:flex;
   justify-content:center;
@@ -31,17 +32,17 @@ canvas#matrix {
 
 /* Tytuł */
 h1{
-  font-size:48px;
+  font-size:60px;
   margin-bottom:50px;
-  background: linear-gradient(90deg, #ff3c3c, #00ff5c, #1e90ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: titleGlow 2s ease-in-out infinite alternate;
+  color:#00ff99;
+  text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 20px #00ff99;
+  animation: neonPulse 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes titleGlow{
-  from {text-shadow: 0 0 10px #ff3c3c, 0 0 20px #00ff5c, 0 0 30px #1e90ff;}
-  to {text-shadow: 0 0 20px #ff3c3c, 0 0 40px #00ff5c, 0 0 60px #1e90ff;}
+@keyframes neonPulse{
+  0% { text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 20px #00ff99; color:#00ff99; }
+  50% { text-shadow: 0 0 15px #00ff99, 0 0 30px #00ff99, 0 0 50px #00ff99; color:#00ffaa; }
+  100% { text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 20px #00ff99; color:#00ff99; }
 }
 
 /* Przyciski */
@@ -49,7 +50,7 @@ button{
   margin:15px auto;
   padding:18px 40px;
   font-size:20px;
-  font-family:'Orbitron', sans-serif;
+  font-family:'Major Mono Display', monospace;
   border:none;
   border-radius:15px;
   cursor:pointer;
