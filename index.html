@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -19,7 +19,7 @@ box-sizing:border-box;
 
 body{
 height:100vh;
-background:#0b0b0f;
+background:#06070c;
 font-family:'Poppins',sans-serif;
 color:white;
 display:flex;
@@ -29,40 +29,38 @@ justify-content:center;
 overflow:hidden;
 }
 
-/* animated background */
+/* animated gradient background */
 
-body::before{
-content:"";
+.bg{
 position:fixed;
 width:200%;
 height:200%;
 background:linear-gradient(
-45deg,
-#0b0b0f,
-#111122,
-#0b0b0f,
-#1a0033
+120deg,
+#0f2027,
+#203a43,
+#2c5364,
+#1a1a40,
+#000000
 );
-animation:bgMove 12s linear infinite;
-z-index:-2;
+background-size:400% 400%;
+animation:bgMove 15s ease infinite;
+z-index:-3;
 }
 
 @keyframes bgMove{
-0%{transform:translate(0,0)}
-50%{transform:translate(-25%,-25%)}
-100%{transform:translate(0,0)}
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
 }
 
-/* mouse glow effect */
+/* particles canvas */
 
-.cursor-glow{
+canvas{
 position:fixed;
-width:300px;
-height:300px;
-background:radial-gradient(circle,rgba(0,255,200,0.25),transparent 60%);
-pointer-events:none;
-transform:translate(-50%,-50%);
-z-index:-1;
+top:0;
+left:0;
+z-index:-2;
 }
 
 /* title */
@@ -74,12 +72,7 @@ margin-bottom:60px;
 background:linear-gradient(90deg,#00f0ff,#00ff9d,#6a5cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-animation:titleGlow 3s infinite alternate;
-}
-
-@keyframes titleGlow{
-from{filter:drop-shadow(0 0 5px #00f0ff)}
-to{filter:drop-shadow(0 0 25px #00ffcc)}
+filter:drop-shadow(0 0 20px rgba(0,255,200,0.6));
 }
 
 /* buttons */
@@ -92,7 +85,7 @@ justify-content:center;
 }
 
 .btn{
-padding:18px 35px;
+padding:18px 40px;
 font-size:20px;
 border-radius:12px;
 border:none;
@@ -104,19 +97,22 @@ transition:0.35s;
 
 .game{
 background:linear-gradient(135deg,#ff2e63,#ff6b6b);
+box-shadow:0 0 20px #ff2e63;
 }
 
 .clothes{
 background:linear-gradient(135deg,#00c853,#69f0ae);
+box-shadow:0 0 20px #00c853;
 }
 
 .bot{
 background:linear-gradient(135deg,#2979ff,#00b0ff);
+box-shadow:0 0 20px #2979ff;
 }
 
 .btn:hover{
-transform:translateY(-6px) scale(1.05);
-box-shadow:0 10px 35px rgba(0,0,0,0.6);
+transform:scale(1.08);
+filter:brightness(1.2);
 }
 
 </style>
@@ -124,7 +120,9 @@ box-shadow:0 10px 35px rgba(0,0,0,0.6);
 
 <body>
 
-<div class="cursor-glow" id="glow"></div>
+<div class="bg"></div>
+
+<canvas id="particles"></canvas>
 
 <h1>MegoTools Hub</h1>
 
@@ -146,14 +144,61 @@ Bot Follower
 
 <script>
 
-const glow = document.getElementById("glow")
+const canvas = document.getElementById("particles")
+const ctx = canvas.getContext("2d")
 
-document.addEventListener("mousemove",(e)=>{
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
 
-glow.style.left = e.clientX + "px"
-glow.style.top = e.clientY + "px"
+let particles = []
+let mouse = {x:null,y:null}
+
+document.addEventListener("mousemove",e=>{
+mouse.x=e.x
+mouse.y=e.y
+
+for(let i=0;i<3;i++){
+particles.push({
+x:mouse.x,
+y:mouse.y,
+size:Math.random()*4+1,
+speedX:(Math.random()-0.5)*2,
+speedY:(Math.random()-0.5)*2,
+life:100
+})
+}
 
 })
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+for(let i=0;i<particles.length;i++){
+
+let p = particles[i]
+
+ctx.fillStyle="rgba(0,255,200,0.8)"
+ctx.beginPath()
+ctx.arc(p.x,p.y,p.size,0,Math.PI*2)
+ctx.fill()
+
+p.x+=p.speedX
+p.y+=p.speedY
+p.life--
+
+if(p.life<=0){
+particles.splice(i,1)
+i--
+}
+
+}
+
+requestAnimationFrame(animate)
+
+}
+
+animate()
 
 </script>
 
