@@ -4,138 +4,145 @@
 <meta charset="UTF-8">
 <title>MegoTools Hub</title>
 
-<!-- Czcionki -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oi&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap" rel="stylesheet">
 
 <style>
+
 body{
-  margin:0;
-  height:100vh;
-  font-family:'Orbitron', sans-serif; /* reszta hubu */
-  background:black;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  text-align:center;
-  overflow:hidden;
+margin:0;
+padding:0;
+background:black;
+color:white;
+font-family:Arial;
+overflow:hidden;
+text-align:center;
 }
 
-/* MATRIX BACKGROUND */
-canvas#matrix{
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  z-index:-1;
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
 }
 
-/* TITLE */
 h1{
-  font-family:'Oi', sans-serif; /* zmieniona czcionka tytułu */
-  font-size:64px;
-  color:#00ff99;
-  text-shadow:0 0 10px #00ff99,0 0 20px #00ff99,0 0 40px #00ff99,0 0 60px #00ff99;
-  margin-bottom:50px;
-  animation: glow 1.5s ease-in-out infinite alternate;
+font-family:'Rubik Puddles', cursive;
+font-size:70px;
+margin-top:120px;
+color:#ffffff;
+text-shadow:
+0 0 10px #ff0000,
+0 0 20px #ff0000,
+0 0 40px #ff0000;
 }
 
-@keyframes glow{
-  0% { text-shadow:0 0 10px #00ff99,0 0 20px #00ff99,0 0 40px #00ff99,0 0 60px #00ff99; color:#00ff99;}
-  50% { text-shadow:0 0 20px #00ff99,0 0 40px #00ff99,0 0 60px #00ff99,0 0 80px #00ff99; color:#00ffaa;}
-  100%{ text-shadow:0 0 10px #00ff99,0 0 20px #00ff99,0 0 40px #00ff99,0 0 60px #00ff99; color:#00ff99;}
+.container{
+margin-top:80px;
 }
 
-/* BUTTONS */
-button{
-  margin:15px auto;
-  padding:18px 40px;
-  font-size:20px;
-  border:none;
-  border-radius:12px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  font-family:'Orbitron', sans-serif;
-  cursor:pointer;
-  position:relative;
-  z-index:1;
-  color:white;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.3);
-  transition: all 0.3s ease;
+.btn{
+display:block;
+width:300px;
+margin:25px auto;
+padding:18px;
+font-size:22px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+color:white;
+font-weight:bold;
+transition:0.3s;
+box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
-/* Neon colors */
-#gameBtn{
-  background:linear-gradient(45deg,#ff3c3c,#ff0000);
-  box-shadow:0 0 10px #ff3c3c,0 0 20px #ff0000,0 0 30px #ff3c3c;
-}
-#clothesBtn{
-  background:linear-gradient(45deg,#00ff88,#00c000);
-  box-shadow:0 0 10px #00ff88,0 0 20px #00c000,0 0 30px #00ff88;
-}
-#botBtn{
-  background:linear-gradient(45deg,#00c0ff,#0040ff);
-  box-shadow:0 0 10px #00c0ff,0 0 20px #0040ff,0 0 30px #00c0ff;
+.btn:hover{
+transform:scale(1.1);
+box-shadow:0 0 30px white;
 }
 
-button:hover{
-  transform: scale(1.08);
-  box-shadow:0 0 20px #fff,0 0 40px #fff,0 0 60px #fff;
+.game{
+background:#ff0000;
 }
+
+.clothes{
+background:#00cc44;
+}
+
+.bot{
+background:#0077ff;
+}
+
 </style>
 </head>
+
 <body>
 
 <canvas id="matrix"></canvas>
 
 <h1>MegoTools Hub</h1>
 
-<button id="gameBtn" onclick="location.href='/gamecopier'">Game Copier</button>
-<button id="clothesBtn" onclick="location.href='/clothescopier'">Clothes Copier</button>
-<button id="botBtn" onclick="location.href='/botfollower'">Bot Follower</button>
+<div class="container">
+
+<button class="btn game" onclick="location.href='GameCopier/'">
+Game Copier
+</button>
+
+<button class="btn clothes" onclick="location.href='ClothesCopier/'">
+Clothes Copier
+</button>
+
+<button class="btn bot" onclick="location.href='BotFollower/'">
+Bot Follower
+</button>
+
+</div>
 
 <script>
-// MATRIX EFFECT
+
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
 
-const letters = "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const fontSize = 18;
-const columns = canvas.width / fontSize;
+const letters = "アァカサタナハマヤャラワ0123456789";
+const matrix = letters.split("");
+
+const fontSize = 16;
+const columns = canvas.width/fontSize;
+
 const drops = [];
 
-for(let x = 0; x < columns; x++){
-  drops[x] = Math.random()*canvas.height;
-}
+for(let x=0;x<columns;x++)
+drops[x]=1;
 
 function draw(){
-  ctx.fillStyle = "rgba(0,0,0,0.05)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  ctx.fillStyle = "#00ff00";
-  ctx.font = fontSize + "px monospace";
+ctx.fillStyle="#0f0";
+ctx.font=fontSize+"px monospace";
 
-  for(let i=0;i<drops.length;i++){
-    const text = letters.charAt(Math.floor(Math.random()*letters.length));
-    ctx.fillText(text,i*fontSize,drops[i]);
-    drops[i] += fontSize;
-    if(drops[i] > canvas.height && Math.random() > 0.975){
-      drops[i] = 0;
-    }
-  }
+for(let i=0;i<drops.length;i++){
+
+const text = matrix[Math.floor(Math.random()*matrix.length)];
+
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+drops[i]=0;
+
+drops[i]++;
+
 }
 
-setInterval(draw,50);
+}
 
-window.addEventListener('resize',()=>{
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+setInterval(draw,35);
+
 </script>
 
 </body>
